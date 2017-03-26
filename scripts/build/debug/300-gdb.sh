@@ -110,7 +110,10 @@ do_debug_gdb_build()
         # Build a native gdbserver if needed. If building only
         # gdbserver, configure in the subdirectory.
         # Newer versions enable it automatically for a native target by default.
-        if [ "${CT_GDB_GDBSERVER}" != "y" ]; then
+        if [ "${CT_GDB_GDBSERVER}" != "y" ] || [ "${CT_GDB_NATIVE_STATIC}" = "y" ]; then
+            native_extra_config+=("--disable-gdbserver")
+        fi
+
             native_extra_config+=("--disable-gdbserver")
         else
             native_extra_config+=("--enable-gdbserver")
