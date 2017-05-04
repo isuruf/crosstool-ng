@@ -62,7 +62,9 @@ do_debug_gdb_build()
             ldflags="${CT_LDFLAGS_FOR_HOST}" \
             prefix="${CT_PREFIX_DIR}" \
             static="${CT_GDB_CROSS_STATIC}" \
-            --with-sysroot="${CT_SYSROOT_DIR}"          \
+            --with-sysroot="${CT_SYSROOT_DIR}" \
+            --with-guile=no \
+            --disable-werror \
             "${cross_extra_config[@]}"
 
         if [ "${CT_BUILD_MANUALS}" = "y" ]; then
@@ -129,6 +131,7 @@ do_debug_gdb_build()
 
         export ac_cv_func_strncmp_works=yes
 
+<<<<<<< HEAD
         # TBD do we need all these? Eg why do we disable TUI if we build curses for target?
         native_extra_config+=(
             --without-uiout
@@ -152,6 +155,43 @@ do_debug_gdb_build()
             static_libstdc="${CT_GDB_NATIVE_STATIC_LIBSTDC}" \
             prefix=/usr \
             destdir="${CT_DEBUGROOT_DIR}" \
+=======
+        # Disable binutils options when building from the binutils-gdb repo.
+        native_extra_config+=("--disable-binutils")
+        native_extra_config+=("--disable-ld")
+        native_extra_config+=("--disable-gas")
+
+        native_CFLAGS=`echo ${native_CFLAGS}`
+        native_CXXFLAGS=`echo ${native_CXXFLAGS}`
+        native_LDFLAGS=`echo ${native_LDFLAGS}`
+
+        CT_DoLog DEBUG "Extra config passed: '${native_extra_config[*]}'"
+
+        CT_DoExecLog CFG                                \
+        CPP="${CT_TARGET_CPP}"                          \
+        CC="${CT_TARGET_CC}"                            \
+        CXX="${CT_TARGET_CXX}"                          \
+        LD="${CT_TARGET_LD}"                            \
+        CFLAGS="${native_CFLAGS}"                       \
+        CXXFLAGS="${native_CXXFLAGS}"                   \
+        LDFLAGS="${native_LDFLAGS}"                     \
+        ${CONFIG_SHELL}                                 \
+        "${gdb_src_dir}/configure"                      \
+            --build=${CT_BUILD}                         \
+            --host=${CT_TARGET}                         \
+            --target=${CT_TARGET}                       \
+            --prefix=/usr                               \
+            --with-build-sysroot="${CT_SYSROOT_DIR}"    \
+            --without-uiout                             \
+            --disable-tui                               \
+            --disable-gdbtk                             \
+            --without-x                                 \
+            --disable-sim                               \
+            --disable-werror                            \
+            --with-guile=no                             \
+            --without-included-gettext                  \
+            --without-develop                           \
+>>>>>>> gdb: Disable --with-guile
             "${native_extra_config[@]}"
 
         unset ac_cv_func_strncmp_works
