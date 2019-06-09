@@ -1,0 +1,59 @@
+From dac396f39dc74ea8a99d89ae0cecc965af21f208 Mon Sep 17 00:00:00 2001
+From: Nehal J Wani <nehaljw.kkd1@gmail.com>
+Date: Tue, 12 Jun 2018 05:26:24 +0000
+Subject: [PATCH 19/19] Hardcode HAVE_ALIGNED_ALLOC=1 in libstdc++-v3/configure
+
+---
+ libstdc++-v3/configure | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
+index 1d0b2fe..e591c0c 100755
+--- a/libstdc++-v3/configure
++++ b/libstdc++-v3/configure
+@@ -28458,6 +28458,11 @@ _ACEOF
+ fi
+ done
+ 
++# The check above works only if aligned_alloc is present as a symbol in libc.so
++# Since we provide a header only implementation, override the value here
++cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_aligned_alloc" | $as_tr_cpp` 1
++_ACEOF
+ 
+   # For iconv support.
+ 
+@@ -53665,6 +53670,9 @@ _ACEOF
+ fi
+ done
+ 
++cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_aligned_alloc" | $as_tr_cpp` 1
++_ACEOF
+     ;;
+ 
+   *-fuchsia*)
+@@ -60305,6 +60313,9 @@ done
+ 
+ 
+ 
++cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_aligned_alloc" | $as_tr_cpp` 1
++_ACEOF
+ 
+ 
+ 
+@@ -66437,6 +66448,10 @@ _ACEOF
+ fi
+ done
+ 
++cat >>confdefs.h <<_ACEOF
++#define `$as_echo "HAVE_aligned_alloc" | $as_tr_cpp` 1
++_ACEOF
++
+     ;;
+   *-netbsd* | *-openbsd*)
+     SECTION_FLAGS='-ffunction-sections -fdata-sections'
+-- 
+2.9.3
+
