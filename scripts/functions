@@ -301,7 +301,9 @@ CT_DoLog() {
                       printf "${CT_LOG_PROGRESS_BAR:+\r}[%-5s]%*s%s%s\n" "${cur_L}" "${indent}" " " "${line}" >&6
                   fi
                   if [ "${CT_LOG_PROGRESS_BAR}" = "y" ]; then
-                      printf "\r[%02d:%02d] %s " $((SECONDS/60)) $((SECONDS%60)) "${_prog_bar[$((_prog_bar_cpt/10))]}" >&6
+		      if [ "$_prog_bar_cpt" -lt "4" ]; then
+                          printf "\r[%02d:%02d] %s " $((SECONDS/60)) $((SECONDS%60)) "${_prog_bar[$((_prog_bar_cpt/10))]}" >&6
+		      fi
                       _prog_bar_cpt=$(((_prog_bar_cpt+1)%40))
                   fi
               elif [ ${cur_l} -le ${CT_LOG_LEVEL_WARN} ]; then
